@@ -85,7 +85,30 @@ namespace DemoWallet
             result.Key = EthECKey.GenerateKey();
 
             var lastBlockNumber = await result.w3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
+
+            /*  The Nethereum GetBlockWithTransactionsByNumber method sometimes
+                returns null (maybe if the block contains no transactions?) and
+                it does not appear to expose the eth_getBlockByNumber call.
+
+                We could do the JSON RPC call manually, but in this case we just need
+                the block for the timestamp.
+
+                If we can not load the block for a brand-new wallet, we will just
+                set the timestamp to the current time.
+            */
+
             var lastBlock = await result.w3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(lastBlockNumber);
+
+            DateTimeOffset walletLastKnownStateTime;
+            if (lastBlock == null)
+            {
+                walletLastKnownStateTime = DateTimeOffset.Now;
+            }
+            else
+            {
+                walletLastKnownStateTime = DateTimeOffset.FromUnixTimeSeconds(
+                    long.Parse(lastBlock.Timestamp.Value.ToString()));
+            }
 
             result.LastProcessedBlock = new Block
             {
