@@ -91,7 +91,7 @@ namespace DemoWallet
         /// <returns>A task that represents the asynchronous operation.</returns>
         internal static async Task MainAsync(string[] args, ILogger log)
         {
-            var wallet = await Wallet.LoadOrCreate("wallet.json");
+            var wallet = await Wallet.LoadOrCreate("wallet.json", log);
 
             bool shouldQuit = false;
             while (!shouldQuit)
@@ -287,7 +287,7 @@ namespace DemoWallet
                 Console.Write("Sending... ");
                 try
                 {
-                    var hash = wallet.SendTransaction(
+                    var hash = await wallet.SendTransaction(
                         recipient,
                         amountInWei,
                         gasPriceInGwei.GweiToWei(),
@@ -393,7 +393,7 @@ namespace DemoWallet
             var maxKnownBlockNumber = await wallet.GetMaxKnownRemoteBlock();
 
             log.Debug("Max known block {number}", maxKnownBlockNumber);
-            log.Debug("Latest processed block {number}", wallet.LastProcessedBlock);
+            log.Debug("Latest processed block {number}", wallet.LastProcessedBlock.Number);
 
             var catchupDelta = maxKnownBlockNumber - wallet.LastProcessedBlock.Number;
             var catchupMin = wallet.LastProcessedBlock.Number;
@@ -406,7 +406,7 @@ namespace DemoWallet
             {
                 var percentage = (double)(currentBlockNumber - catchupMin) / (double)catchupDelta;
 
-                log.Debug(
+                log.Information(
                     "Processing block {number} / {maxKnown} ({percentage:0.00}%)",
                     currentBlockNumber,
                     maxKnownBlockNumber,

@@ -15,6 +15,7 @@ namespace DemoWallet
     using Nethereum.Web3;
     using Nethereum.Web3.Accounts;
     using Newtonsoft.Json;
+    using Serilog;
 
     /// <summary>
     /// This class represents an Ethereum wallet. It has an associated
@@ -26,6 +27,7 @@ namespace DemoWallet
     /// </content>
     internal partial class Wallet
     {
+        private ILogger logger;
         private Web3 w3;
         private EthECKey key;
         private string fileName = null;
@@ -157,8 +159,31 @@ namespace DemoWallet
                     var forMe = string.Equals(tx.To, this.Address, StringComparison.OrdinalIgnoreCase);
                     var fromMe = string.Equals(tx.From, this.Address, StringComparison.OrdinalIgnoreCase);
 
+                    this.logger.Debug("Verifying transaction {transactionHash}", tx.TransactionHash);
+
                     if (forMe || fromMe)
                     {
+                        if (forMe)
+                        {
+                            this.logger.Information("Found incoming transaction with hash {transactionHash}", tx.TransactionHash);
+                        }
+                        else
+                        {
+                            this.logger.Information("Found outgoing transaction with hash {transactionHash}", tx.TransactionHash);
+                        }
+
+                        /*
+                        In case we are repeating a scan for some reason (e.g. debugging),
+                        we do not want to add transactions we already have found before.
+                        */
+                        var knownTransactions = walletBeingUpdated.KnownTransactions.FindAll(
+                            o => string.Equals(o.TxHash, tx.TransactionHash, StringComparison.OrdinalIgnoreCase));
+                        if (knownTransactions.Count > 0)
+                        {
+                            this.logger.Information("Not saving transaction {transactionHash} locally because it is already known.", tx.TransactionHash);
+                            continue;
+                        }
+
                         walletBeingUpdated.KnownTransactions.Add(new Transaction(
                             new Block(
                                 tx.BlockNumber.Value,

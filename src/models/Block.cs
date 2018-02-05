@@ -6,6 +6,7 @@ namespace DemoWallet
 {
     using System;
     using System.Numerics;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Contains information about an Ethereum block.
@@ -20,7 +21,8 @@ namespace DemoWallet
         /// </summary>
         /// <param name="number">BigInteger representing the block number.</param>
         /// <param name="timestamp">DateTimeOffset representing the block's timestamp (i.e. time of mining).</param>
-        internal Block(BigInteger number, DateTimeOffset timestamp)
+        [JsonConstructor]
+        public Block(BigInteger number, DateTimeOffset timestamp)
         {
             this.Number = number;
             this.Timestamp = timestamp;

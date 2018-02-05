@@ -14,6 +14,7 @@ namespace DemoWallet
     using Nethereum.Web3;
     using Nethereum.Web3.Accounts;
     using Newtonsoft.Json;
+    using Serilog;
 
     /// <content>
     /// Contains methods for creating, saving, and loading the wallet to and from JSON
@@ -21,6 +22,31 @@ namespace DemoWallet
     /// </content>
     internal partial class Wallet
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Wallet"/> class.
+        ///
+        /// This constructor is meant for the JSON deserializer (since the properties
+        /// are immutable).
+        /// </summary>
+        /// <param name="lastProcessedBlock">Last processed block for this wallet (i.e. last block whose transactions we have examined).</param>
+        /// <param name="knownTransactions">A list of known transactions.</param>
+        /// <param name="privateKeyHexString">The private key (32 byte hex string) to use for this wallet.</param>
+        [JsonConstructor]
+        public Wallet(
+            Block lastProcessedBlock,
+            List<Transaction> knownTransactions,
+            string privateKeyHexString)
+        {
+            this.LastProcessedBlock = lastProcessedBlock;
+            this.KnownTransactions = knownTransactions;
+            this.PrivateKeyHexString = privateKeyHexString;
+        }
+
+        private Wallet(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
         /// <summary>
         /// Loads a wallet from a JSON file at the given path.
         /// If the JSON file does not exist, a new wallet will be created,
@@ -35,17 +61,18 @@ namespace DemoWallet
         /// processed block.
         /// </summary>
         /// <param name="file">Path to a wallet JSON file.</param>
+        /// <param name="logger">A logger.</param>
         /// <returns>
         /// A task that represents the asynchronous operation.
         /// The task will return a Wallet object associated with
         /// the given path.
         /// </returns>
-        internal static async Task<Wallet> LoadOrCreate(string file)
+        internal static async Task<Wallet> LoadOrCreate(string file, ILogger logger)
         {
-            var result = FromJson(file);
+            var result = FromJson(file, logger);
             if (result == null)
             {
-                result = await Create(file);
+                result = await Create(file, logger);
             }
 
             return result;
@@ -66,7 +93,7 @@ namespace DemoWallet
             this.Save(this.fileName, proc);
         }
 
-        private static Wallet FromJson(string path)
+        private static Wallet FromJson(string path, ILogger logger)
         {
             Wallet result = null;
             if (File.Exists(path))
@@ -74,14 +101,15 @@ namespace DemoWallet
                 var stateJson = File.ReadAllText(path);
                 result = JsonConvert.DeserializeObject<Wallet>(stateJson);
                 result.fileName = path;
+                result.logger = logger;
             }
 
             return result;
         }
 
-        private static async Task<Wallet> Create(string outputFile)
+        private static async Task<Wallet> Create(string outputFile, ILogger logger)
         {
-            var result = new Wallet();
+            var result = new Wallet(logger);
             result.Key = EthECKey.GenerateKey();
 
             var lastBlockNumber = await result.w3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
@@ -97,22 +125,22 @@ namespace DemoWallet
                 set the timestamp to the current time.
             */
 
-            var lastBlock = await result.w3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(lastBlockNumber);
+            var optionalLastBlock = await result.w3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(lastBlockNumber);
 
             DateTimeOffset walletLastKnownStateTime;
-            if (lastBlock == null)
+            if (optionalLastBlock == null)
             {
                 walletLastKnownStateTime = DateTimeOffset.Now;
             }
             else
             {
                 walletLastKnownStateTime = DateTimeOffset.FromUnixTimeSeconds(
-                    long.Parse(lastBlock.Timestamp.Value.ToString()));
+                    long.Parse(optionalLastBlock.Timestamp.Value.ToString()));
             }
 
             result.LastProcessedBlock = new Block(
-                lastBlock.Number,
-                DateTimeOffset.FromUnixTimeSeconds(long.Parse(lastBlock.Timestamp.Value.ToString())));
+                lastBlockNumber,
+                walletLastKnownStateTime);
 
             result.Save(outputFile);
             return result;
@@ -120,13 +148,13 @@ namespace DemoWallet
 
         private void Save(string path, Action<Wallet> proc)
         {
-            this.fileName = path ?? throw new ArgumentNullException(nameof(path));
             proc(this);
             this.Save(path);
         }
 
         private void Save(string path)
         {
+            this.fileName = path ?? throw new ArgumentNullException(nameof(path));
             var json = JsonConvert.SerializeObject(this);
             File.WriteAllText(path, json);
         }

@@ -18,7 +18,7 @@ namespace DemoWallet
         /// Initializes a new instance of the <see cref="Transaction"/> struct.
         /// </summary>
         /// <param name="block">A block object representing the block in which this transaction was included.</param>
-        /// <param name="transactionHash">
+        /// <param name="txHash">
         /// A hex-string representing the transaction hash.
         /// This value can be used e.g. on https://etherscan.io to lookup the transaction
         /// and see more information about it.
@@ -27,16 +27,17 @@ namespace DemoWallet
         /// <param name="to">A hex-string denoting the recipient of the transaction.</param>
         /// <param name="feeInWei">A BigInteger representing the wei-denominated value which the sender paid for the transaction (i.e. gas multiplied with gas price).</param>
         /// <param name="amountInWei">A BigInteger representing the wei-denominated value which the sender sent to the recipient.</param>
+        [JsonConstructor]
         internal Transaction(
             Block block,
-            string transactionHash,
+            string txHash,
             string from,
             string to,
             BigInteger feeInWei,
             BigInteger amountInWei)
         {
             this.Block = block;
-            this.TxHash = transactionHash;
+            this.TxHash = txHash;
             this.From = from;
             this.To = to;
             this.AmountInWei = amountInWei;
