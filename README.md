@@ -51,7 +51,3 @@ There are a couple of extensions:
   This is used for verifying that the user entered a valid Ethereum address, when sending a transaction.
 - DecimalExtensions.cs and BigIntegerExtensions.cs contain code for converting between wei and ether denominated values
   (BigIntegers and decimals respectively).
-- 
-
-
-
