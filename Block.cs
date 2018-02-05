@@ -18,11 +18,11 @@ namespace DemoWallet
         /// <summary>
         /// The block number.
         /// </summary>
-        internal BigInteger Number;
+        public BigInteger Number;
 
         /// <summary>
         /// The timestamp of the block (i.e. when it was mined).
         /// </summary>
-        internal DateTimeOffset Timestamp;
+        public DateTimeOffset Timestamp;
     }
 }

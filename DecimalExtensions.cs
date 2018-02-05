@@ -18,7 +18,7 @@ namespace DemoWallet
         /// </summary>
         /// <param name="val">An ether-denominated decimal value.</param>
         /// <returns>A wei-denominated BigInteger value.</returns>
-        public static BigInteger EthToWei(this decimal val)
+        internal static BigInteger EthToWei(this decimal val)
         {
             return BigInteger.Parse((val * 1E18M).ToString());
         }

@@ -21,7 +21,7 @@ namespace DemoWallet
         /// </summary>
         /// <param name="val">The string which needs to be verified.</param>
         /// <returns>True if the string is a valid 20-byte hex string; otherwise false.</returns>
-        public static bool IsValidEthereumAddress(this string val)
+        internal static bool IsValidEthereumAddress(this string val)
         {
             try
             {

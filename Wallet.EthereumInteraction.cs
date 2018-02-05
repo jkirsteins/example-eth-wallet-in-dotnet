@@ -56,7 +56,7 @@ namespace DemoWallet
         /// can be used to lookup information about the transaction later, and to determine
         /// if it succeeded or failed, and how much it actually paid in fees.
         /// </returns>
-        public async Task<string> SendTransaction(
+        internal async Task<string> SendTransaction(
             string recipient,
             BigInteger amountInWei,
             BigInteger gasPriceInWei,

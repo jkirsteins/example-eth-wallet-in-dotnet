@@ -50,13 +50,13 @@ namespace DemoWallet
         /// </summary>
         /// <returns>A decimal ether-denominated value.</returns>
         [JsonIgnore]
-        public decimal AmountInEth => this.AmountInWei.WeiToEth();
+        internal decimal AmountInEth => this.AmountInWei.WeiToEth();
 
         /// <summary>
         /// Gets an ether-denominated value representing the transaction fee.
         /// </summary>
         /// <returns>A decimal ether-denominated value.</returns>
         [JsonIgnore]
-        public decimal FeeInEth => this.FeeInWei.WeiToEth();
+        internal decimal FeeInEth => this.FeeInWei.WeiToEth();
     }
 }

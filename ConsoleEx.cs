@@ -11,7 +11,7 @@ namespace DemoWallet
     /// <summary>
     /// Contains helper methods for prompting for values via the console.
     /// </summary>
-    public static class ConsoleEx
+    internal static class ConsoleEx
     {
         /// <summary>
         /// Prompts the user for a valid Ethereum address. It must
@@ -23,7 +23,7 @@ namespace DemoWallet
         /// </summary>
         /// <param name="message">A message to display to the user before each input prompt.</param>
         /// <returns>A hex string representing 20 bytes.</returns>
-        public static string PromptForAddress(string message)
+        internal static string PromptForAddress(string message)
         {
             string result;
             do
@@ -43,7 +43,7 @@ namespace DemoWallet
         /// </summary>
         /// <param name="message">A message to display to the user before each input prompt.</param>
         /// <returns>The parsed decimal value.</returns>
-        public static decimal PromptForDecimal(string message)
+        internal static decimal PromptForDecimal(string message)
         {
             decimal? result = null;
             do
@@ -68,7 +68,7 @@ namespace DemoWallet
         /// <param name="message">A message to display to the user before each input prompt.</param>
         /// <param name="defaultValue">Value to return if the user enters an empty string.</param>
         /// <returns>A BigInteger representing the user-entered value, or the specified default value.</returns>
-        public static BigInteger PromptForBigInteger(string message, BigInteger defaultValue)
+        internal static BigInteger PromptForBigInteger(string message, BigInteger defaultValue)
         {
             BigInteger? result = null;
             do

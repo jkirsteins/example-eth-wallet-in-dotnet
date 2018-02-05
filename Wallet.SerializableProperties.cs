@@ -30,18 +30,18 @@ namespace DemoWallet
         /// This also stores the block's timestamp, which is useful for displaying a human-readable
         /// value for the last-known time the wallet's balance and transaction list was verified.
         /// </summary>
-        internal Block LastProcessedBlock { get; private set; }
+        public Block LastProcessedBlock { get; private set; }
 
         /// <summary>
         /// Gets a list of known transactions sent to/from this wallet.
         /// </summary>
-        internal List<Transaction> KnownTransactions { get; private set; } = new List<Transaction>();
+        public List<Transaction> KnownTransactions { get; private set; } = new List<Transaction>();
 
         /// <summary>
         /// Gets this wallet's Ethereum address.
         /// </summary>
         /// <returns>A 20-byte hex-string.</returns>
-        internal string Address => this.Key.GetPublicAddress();
+        public string Address => this.Key.GetPublicAddress();
 
         /// <summary>
         /// Gets or sets the private key as a hex string.
@@ -49,7 +49,7 @@ namespace DemoWallet
         /// Setting this value will re-initialize the Key property.
         /// </summary>
         /// <returns>A 32 byte hex-string representing a valid SECP256k1 private key.</returns>
-        internal string PrivateKeyHexString
+        public string PrivateKeyHexString
         {
             get => this.Key.GetPrivateKey();
             set
