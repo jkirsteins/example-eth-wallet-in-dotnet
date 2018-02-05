@@ -159,27 +159,21 @@ namespace DemoWallet
 
                     if (forMe || fromMe)
                     {
-                        walletBeingUpdated.KnownTransactions.Add(new Transaction
-                        {
-                            Block = new Block
-                            {
-                                Number = tx.BlockNumber.Value,
-                                Timestamp = blockTime,
-                            },
-                            TxHash = tx.TransactionHash,
-                            From = tx.From,
-                            To = tx.To,
-                            FeeInWei = tx.Gas.Value * tx.GasPrice.Value,
-                            AmountInWei = tx.Value
-                        });
+                        walletBeingUpdated.KnownTransactions.Add(new Transaction(
+                            new Block(
+                                tx.BlockNumber.Value,
+                                blockTime),
+                            tx.TransactionHash,
+                            tx.From,
+                            tx.To,
+                            tx.Gas.Value * tx.GasPrice.Value,
+                            tx.Value));
                     }
                 }
 
-                walletBeingUpdated.LastProcessedBlock = new Block
-                {
-                    Number = blockNumber,
-                    Timestamp = blockTime
-                };
+                walletBeingUpdated.LastProcessedBlock = new Block(
+                    blockNumber,
+                    blockTime);
             });
         }
     }

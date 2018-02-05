@@ -110,11 +110,9 @@ namespace DemoWallet
                     long.Parse(lastBlock.Timestamp.Value.ToString()));
             }
 
-            result.LastProcessedBlock = new Block
-            {
-                Number = lastBlock.Number,
-                Timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(lastBlock.Timestamp.Value.ToString()))
-            };
+            result.LastProcessedBlock = new Block(
+                lastBlock.Number,
+                DateTimeOffset.FromUnixTimeSeconds(long.Parse(lastBlock.Timestamp.Value.ToString())));
 
             result.Save(outputFile);
             return result;

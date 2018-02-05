@@ -16,13 +16,24 @@ namespace DemoWallet
     internal struct Block
     {
         /// <summary>
-        /// The block number.
+        /// Initializes a new instance of the <see cref="Block"/> struct.
         /// </summary>
-        public BigInteger Number;
+        /// <param name="number">BigInteger representing the block number.</param>
+        /// <param name="timestamp">DateTimeOffset representing the block's timestamp (i.e. time of mining).</param>
+        internal Block(BigInteger number, DateTimeOffset timestamp)
+        {
+            this.Number = number;
+            this.Timestamp = timestamp;
+        }
 
         /// <summary>
-        /// The timestamp of the block (i.e. when it was mined).
+        /// Gets the block number.
         /// </summary>
-        public DateTimeOffset Timestamp;
+        public BigInteger Number { get; }
+
+        /// <summary>
+        /// Gets the timestamp of the block (i.e. when it was mined).
+        /// </summary>
+        public DateTimeOffset Timestamp { get; }
     }
 }
