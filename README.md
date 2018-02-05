@@ -1,3 +1,5 @@
+![Wallet Screnshot](img/wallet_screen.png)
+
 # Demo Ethereum Wallet
 
 This is a barebones Ethereum wallet, which supports:
