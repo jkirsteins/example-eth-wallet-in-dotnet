@@ -1,0 +1,9 @@
+{
+    "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+    "settings": {
+        "documentationRules": {
+            "xmlHeader": false,
+            "copyrightText": "Copyright (c) 2018 Janis Kirsteins.\nLicenced under the MIT licence.\nSee the LICENSE file in the project root for more information."
+        }
+    }
+}
