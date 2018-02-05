@@ -20,7 +20,7 @@ namespace DemoWallet
         /// <returns>A wei-denominated BigInteger value.</returns>
         internal static BigInteger EthToWei(this decimal val)
         {
-            return BigInteger.Parse((val * 1E18M).ToString());
+            return BigInteger.Parse((val * 1E18M).ToString("G29"));
         }
     }
 }
