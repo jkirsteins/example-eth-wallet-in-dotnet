@@ -7,6 +7,10 @@ This is a barebones Ethereum wallet, which supports:
 - synchronizing with Infura's Rinkeby node
 - sending transactions
 
+Values denominated in wei are represented using the BigInteger type.
+
+Values denominated in ether (used in interaction with the user) are represented using the decimal type.
+
 ## Dependencies
 
 The main dependency is the Nethereum library, which handles key generation, and Ethereum JSON RPC
@@ -33,4 +37,21 @@ The application is structured as a CLI application, which presents a menu with t
 - listing known transactions (found by the synchronization action, and stored in the local JSON file)
 - sending a transaction
 - performing a new synchronization action
+
+The file Program.cs mainly deals with the UI, and is pretty boring.
+
+ConsoleEx is a class which contains convenience methods for prompting values from the user
+using the command-line (e.g. helpers for querying for decimals, BigIntegers, optional BigIntegers and Ethereum addresses)
+
+## Extensions
+
+There are a couple of extensions:
+
+- StringExtensions.cs contains code for verifying that a string is a hex string representing a valid 20-byte value.
+  This is used for verifying that the user entered a valid Ethereum address, when sending a transaction.
+- DecimalExtensions.cs and BigIntegerExtensions.cs contain code for converting between wei and ether denominated values
+  (BigIntegers and decimals respectively).
+- 
+
+
 
