@@ -1,4 +1,4 @@
-![Wallet Screnshot](img/wallet_screen.png)
+![Wallet Screnshot](img/wallet_screen.png?)
 
 # Demo Ethereum Wallet
 
