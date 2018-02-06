@@ -13,6 +13,8 @@ Values denominated in wei are represented using the BigInteger type.
 
 Values denominated in ether (used in interaction with the user) are represented using the decimal type.
 
+This wallet was written to accompany this Medium article: [Writing an Ethereum Wallet for Fun](https://medium.com/@jkirsteins/writing-an-ethereum-wallet-for-fun-e82a05322ae2).
+
 ## Dependencies
 
 The main dependency is the Nethereum library, which handles key generation, and Ethereum JSON RPC
@@ -24,9 +26,9 @@ The Wallet is a partial class split across 3 files:
 
 - Wallet.SerializableProperties.cs contains the properties that will be saved to/loaded from JSON
 - Wallet.LoadingAndSaving.cs contains code that pertains to wallet generation, loading, and saving
-- Wallet.EthereumInteraction.cs contains code that interacts with the Rinkeby node using the Nethereum library
+- Wallet.EthereumInteraction.cs contains code that interacts with the Infura Rinkeby node using the Nethereum library
 
-The Wallet - upon creation - will query the Rinkeby node for the latest known block, and store it as the
+The Wallet - upon creation - will query the Infura Rinkeby node for the latest known block, and store it as the
 last known block.
 
 Afterwards, it can be synchronized - every synchronization action will load blocks between the last known block 
